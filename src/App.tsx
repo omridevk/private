@@ -42,6 +42,7 @@ const App = () => {
 
   function handleToggle(enable: boolean, vin: string) {
     setEnabledVins((prev: string[]) => {
+
       const newData = prev.filter((item) => item !== vin);
       if (enable) {
         return [...newData, vin];
@@ -50,17 +51,18 @@ const App = () => {
     });
   }
   useEffect(() => {
-    const subs = vins.map((item) =>
+    const subs = vins.filter(item => enabledVins.includes(item.vin)).map((item) =>
       createStreamerFrom(() => generateCarData(item.vin))
     );
     subs.forEach((item) => {
+
       item.subscribe(streamHandler);
       item.start();
     });
     return () => {
       subs.forEach((item) => item.removeHandler(streamHandler));
     };
-  }, [streamHandler, vins]);
+  }, [enabledVins, streamHandler, vins]);
 
   function handleSearch(vin: string) {
     if (vins.find((item) => item.vin === vin)) {
@@ -69,7 +71,7 @@ const App = () => {
     setEnabledVins((prev) => [...prev, vin]);
     setVins((prev) => [...prev, { vin, color: createRandomColor() }]);
   }
-  
+
   return (
     <Box
       sx={{
