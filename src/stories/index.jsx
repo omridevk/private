@@ -1,16 +1,16 @@
-import { action } from '@storybook/addon-actions'
-import { color, number, text, withKnobs } from '@storybook/addon-knobs'
-import { linkTo } from '@storybook/addon-links'
-import { storiesOf } from '@storybook/react'
-import { Welcome } from '@storybook/react/demo'
-import React from 'react'
-import '../assets/global.scss'
-import Button from '../components/Button'
-import Checkbox from '../components/Checkbox'
-import EventNotification from '../components/EventNotification'
-import Input from '../components/Input'
+import { action } from "@storybook/addon-actions";
+import { color, number, text, withKnobs } from "@storybook/addon-knobs";
+import { linkTo } from "@storybook/addon-links";
+import { storiesOf } from "@storybook/react";
+import { Welcome } from "@storybook/react/demo";
+import React from "react";
+import "../assets/global.scss";
+import Button from "../components/Button";
+import Checkbox from "../components/Checkbox";
+import EventNotification from "../components/EventNotification";
+import Input from "../components/Input";
 
-const stories = storiesOf('Storybook Knobx', module)
+const stories = storiesOf("Storybook Knobx", module);
 
 stories.addDecorator(withKnobs)
 

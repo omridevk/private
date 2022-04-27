@@ -1,8 +1,8 @@
-import './LevelBar.scss'
+import "./LevelBar.scss";
 
 interface LevelBarProps {
-  width: number
-  fraction: number
+  width: number;
+  fraction: number;
 }
 
 export default function LevelBar({ width, fraction }: LevelBarProps) {

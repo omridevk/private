@@ -1,15 +1,14 @@
-import faker from 'faker'
+import faker from "faker";
 
 export interface CarData {
-  vin: string
-  timestamp: any
-  fuel: number
-  wiperFluid: number
+  vin: string;
+  timestamp: any;
+  fuel: number;
+  wiperFluid: number;
   location: {
-    lat: number
-    lng: number
-  }
-
+    lat: number;
+    lng: number;
+  };
 }
 
 export default function generateCarData(vin: string): CarData {

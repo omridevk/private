@@ -1,5 +1,5 @@
-import React from 'react'
-import './Checkbox.scss'
+import React from "react";
+import "./Checkbox.scss";
 
 interface CheckboxProps extends React.PropsWithChildren<any> {}
 

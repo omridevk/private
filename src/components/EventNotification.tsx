@@ -1,11 +1,12 @@
-import './EventNotification.scss'
-import React from 'react'
-import LevelBar from './LevelBar'
+import "./EventNotification.scss";
+import React from "react";
+import LevelBar from "./LevelBar";
 
-import type { CarData } from '../api/data-generator'
+import type { CarData } from "../api/data-generator";
+
 interface EventNotificationProps {
-  carEvent: CarData
-  color?: string
+  carEvent: CarData;
+  color?: string;
 }
 
 const EventNotification = ({

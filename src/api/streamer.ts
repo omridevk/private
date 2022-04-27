@@ -1,8 +1,8 @@
-import faker from 'faker'
-import isFunction from 'lodash/fp/isFunction'
-import type {CarData} from './data-generator'
+import faker from "faker";
+import isFunction from "lodash/fp/isFunction";
+import type { CarData } from "./data-generator";
 
-type Generator = () => CarData
+type Generator = () => CarData;
 type Handler = (carData: CarData) => unknown
 
 export default function createStreamerFrom(generator: Generator, range = DEFAULT_TIME_RANGE_IN_MS) {
@@ -24,10 +24,12 @@ class Streamer {
   start() {
     this.isStreaming = true
     this.runTriggers()
+    return this;
   }
 
   stop() {
     this.isStreaming = false
+    return this;
   }
 
   runTriggers() {
@@ -43,10 +45,12 @@ class Streamer {
 
   subscribe(handler: Handler) {
     this.handlers.push(handler)
+    return this;
   }
 
   removeHandler(handler: Handler) {
     this.handlers = this.handlers.filter(h => h !== handler)
+    return this;
   }
 
   trigger() {

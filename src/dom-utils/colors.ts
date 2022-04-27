@@ -1,5 +1,5 @@
-import faker from 'faker'
+import faker from "faker";
 
 export default function createRandomColor() {
-  return faker.internet.color()
+  return faker.internet.color();
 }
