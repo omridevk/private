@@ -69,11 +69,7 @@ const App = () => {
     setEnabledVins((prev) => [...prev, vin]);
     setVins((prev) => [...prev, { vin, color: createRandomColor() }]);
   }
-
-  React.useEffect(() => {
-    return () => {};
-  }, []);
-
+  
   return (
     <Box
       sx={{
