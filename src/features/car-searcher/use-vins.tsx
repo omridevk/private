@@ -2,6 +2,7 @@ import createStreamerFrom from "../../api/streamer";
 import generateCarData, { CarData } from "../../api/data-generator";
 import { useCallback, useEffect, useState } from "react";
 import createRandomColor from "../../dom-utils/colors";
+import createCarStreamer from "../../api/car-data-streamer";
 
 export function useVins(filterEvents: boolean) {
   const [data, setData] = useState<Record<string, CarData>>({});
@@ -18,12 +19,15 @@ export function useVins(filterEvents: boolean) {
       return [...newItems, vin];
     });
   }, []);
-  const addVin = useCallback((vin) => {
-    toggleVin(vin, true);
-    setVins((prev) => {
-      return new Set([...prev, { vin, color: createRandomColor() }]);
-    });
-  }, [toggleVin]);
+  const addVin = useCallback(
+    (vin) => {
+      toggleVin(vin, true);
+      setVins((prev) => {
+        return new Set([...prev, { vin, color: createRandomColor() }]);
+      });
+    },
+    [toggleVin]
+  );
   const handler = useCallback(
     (data) => {
       if (filterEvents && data.fuel * 100 < 15) {
@@ -39,12 +43,11 @@ export function useVins(filterEvents: boolean) {
   );
   useEffect(() => {
     const streams = [...vins].map((item) => {
-      const stream = createStreamerFrom(() => generateCarData(item.vin));
+      const stream = createCarStreamer(item.vin);
       if (!enabledVins.includes(item.vin)) {
         return stream;
       }
-      stream.subscribe(handler);
-      stream.start();
+      stream.subscribe(handler).start();
       return stream;
     });
     return () => {
