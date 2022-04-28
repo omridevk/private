@@ -40,14 +40,17 @@ export function useVins(filterEvents: boolean) {
   useEffect(() => {
     const streams = [...vins].map((item) => {
       const stream = createStreamerFrom(() => generateCarData(item.vin));
+      if (!enabledVins.includes(item.vin)) {
+        return stream;
+      }
       stream.subscribe(handler);
       stream.start();
       return stream;
     });
     return () => {
-      streams.forEach((item) => item.removeHandler(handler));
+      streams.forEach((item) => item?.removeHandler(handler));
     };
-  }, [handler, vins]);
+  }, [enabledVins, handler, vins]);
   return {
     vins: vins,
     toggleVin,
