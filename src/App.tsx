@@ -1,75 +1,20 @@
 import "./App.css";
-import React, { useCallback, useEffect, useState } from "react";
-import generateCarData from "./api/data-generator";
-import createStreamerFrom from "./api/streamer";
-import {
-  Box,
-  Checkbox,
-  checkboxClasses,
-  Grid,
-  Paper,
-  styled,
-  Toolbar,
-} from "@mui/material";
+import React, { useState } from "react";
+import { Box, Checkbox, Grid, Paper, styled } from "@mui/material";
 import { CarSearcher } from "./features/car-searcher";
-import createRandomColor from "./dom-utils/colors";
 import { CarsInfo } from "./features/car-searcher/cars-info";
+import { useVins } from "./features/car-searcher/use-vins";
 
 const StyledVinNumber = styled("span")<{ color: string }>`
   color: ${({ color }) => color};
 `;
 
 const App = () => {
-  const [data, setData] = useState<any>({});
-  const [vins, setVins] = useState<{ vin: string; color: string }[]>([]);
-  const [enabledVins, setEnabledVins] = useState<string[]>([]);
   const [filterEvents, setFilterEvents] = useState(false);
-  const streamHandler = useCallback(
-    (data) => {
-      if (filterEvents && data.fuel * 100 < 15) {
-        console.log("filtered an event", { data });
-        return;
-      }
-      setData((prevData: any) => ({
-        ...prevData,
-        [data.vin]: {
-          ...data,
-        },
-      }));
-    },
-    [filterEvents]
-  );
-
-  function handleToggle(enable: boolean, vin: string) {
-    setEnabledVins((prev: string[]) => {
-
-      const newData = prev.filter((item) => item !== vin);
-      if (enable) {
-        return [...newData, vin];
-      }
-      return newData;
-    });
-  }
-  useEffect(() => {
-    const subs = vins.filter(item => enabledVins.includes(item.vin)).map((item) =>
-      createStreamerFrom(() => generateCarData(item.vin))
-    );
-    subs.forEach((item) => {
-
-      item.subscribe(streamHandler);
-      item.start();
-    });
-    return () => {
-      subs.forEach((item) => item.removeHandler(streamHandler));
-    };
-  }, [enabledVins, streamHandler, vins]);
-
+  const {data, enabledVins, toggleVin, vins, addVin } = useVins(filterEvents);
+  
   function handleSearch(vin: string) {
-    if (vins.find((item) => item.vin === vin)) {
-      return;
-    }
-    setEnabledVins((prev) => [...prev, vin]);
-    setVins((prev) => [...prev, { vin, color: createRandomColor() }]);
+    addVin(vin);
   }
 
   return (
@@ -95,7 +40,7 @@ const App = () => {
         >
           <Grid item xs={3} sx={{ padding: 2 }}>
             <CarSearcher onSearch={handleSearch}></CarSearcher>
-            {vins.map((item) => (
+            {[...vins].map((item) => (
               <Box
                 key={item.vin}
                 sx={{
@@ -107,7 +52,7 @@ const App = () => {
                 <Checkbox
                   style={{color: item.color}}
                   checked={enabledVins.includes(item.vin)}
-                  onChange={(_, checked) => handleToggle(checked, item.vin)}
+                  onChange={(_, checked) => toggleVin(item.vin, checked)}
                 />
                 <StyledVinNumber color={item.color}>{item.vin}</StyledVinNumber>
               </Box>
@@ -116,7 +61,7 @@ const App = () => {
           <CarsInfo
             filterEvents={filterEvents}
             onFilterEventChanged={(checked) => setFilterEvents(checked)}
-            vins={vins}
+            vins={[...vins]}
             data={data}
             enabledVins={enabledVins}
           />
